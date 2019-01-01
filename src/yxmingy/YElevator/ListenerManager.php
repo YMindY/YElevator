@@ -3,11 +3,13 @@
 namespace yxmingy\YElevator;
 use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
+use yxmingy\YElevator\Manager\Manager;
 abstract class ListenerManager extends PluginBase
 {
   use starter\Starter;
   protected static $namelist = 
   [
+    'manager'=>Manager::class,
   ];
   protected static $listeners = [];
   final protected static function register(Listener $listener):void
