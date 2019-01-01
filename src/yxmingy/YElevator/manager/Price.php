@@ -1,6 +1,6 @@
 <?php
 /* 分管价格 */
-namespace yxmingy\YElevator\Manager;
+namespace yxmingy\YElevator\manager;
 use pocketmine\utils\Config;
 use yxmingy\YElevator\Main;
 

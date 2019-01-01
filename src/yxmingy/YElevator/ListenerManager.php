@@ -3,7 +3,7 @@
 namespace yxmingy\YElevator;
 use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
-use yxmingy\YElevator\Manager\Manager;
+use yxmingy\YElevator\manager\Manager;
 abstract class ListenerManager extends PluginBase
 {
   use starter\Starter;
