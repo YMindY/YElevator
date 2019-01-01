@@ -14,7 +14,7 @@ abstract class CommandDispenser extends ListenerManager
     foreach(self::$cmdList as $cmd=>$cls)
     {
       $exer = new $cls();
-      if(!$exer instanceof CommandExecutor)
+      if(!$exer instanceof starter\CommandExecutor)
       {
         throw(new \TypeError("$cls is not a Executor."));
       }else{

@@ -1,6 +1,7 @@
 <?php
 namespace yxmingy\YElevator\starter;
 use pocketmine\Server;
+use yxmingy\YElevator\Main;
 trait Starter
 {
   protected static $instance;
@@ -9,7 +10,7 @@ trait Starter
   {
     self::$instance=$this;
   }
-  public static function getInstance():?object
+  public static function getInstance():?Main
   {
     return self::$instance;
   }
