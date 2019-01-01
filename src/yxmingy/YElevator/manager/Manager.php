@@ -6,7 +6,7 @@ use yxmingy\YElevator\Main;
 use pocketmine\level\Level;
 use pocketmine\event\Listener;
 use yxmingy\YElevator\starter\CommandExecutor;
-use pocketmine\command\{Command,CommandSender};
+use pocketmine\command\CommandSender;
 use pocketmine\event\player\PlayerInteractEvent;
 
 class Manager implements Listener,CommandExecutor
@@ -22,6 +22,7 @@ class Manager implements Listener,CommandExecutor
       base_y=>(num)
       now_y=>(num)
       floor=>(num)
+      status=>(hign/low)
       ele=>(array)
     ],
     ......
@@ -75,8 +76,9 @@ class Manager implements Listener,CommandExecutor
       switch($args[1])
       {
       case "floor":
-        $sender->sendMessage("开始设置层数电梯!点一个告示牌设置为1楼");
+        $sender->sendMessage("开始设置层数电梯!点一个告示牌设置为1楼\n取消设置使用/dt set cancel");
         $this->setters[$name] = array(
+        'status'=>'high',
         'ele'=>$ele
         );
       break;
@@ -111,20 +113,47 @@ class Manager implements Listener,CommandExecutor
       $x = (int)$block->getX();
       $y = (int)$block->getY();
       $z = (int)$block->getZ();
+      //这个人正在设置
       if(in_array($name,array_keys($this->setters)))
       {
-        if(empty($this->setters[$name]))
+        $setter = &$this->setters[$name];
+        if(!isset($setter['base_y']))
         {
-          $this->setters[$name] = array_merge($this->setters[$name],array(
+          $setter = array_merge($setter,array(
             'x'=>$x,
             'z'=>$z,
             'base_y'=>$y,
             'now_y'=>$y,
             'floor'=>1
           ));
-          $floor = $this->setters[$name]['floor'];
-          $sender->sendMessage("当前y轴高度为{$y}，层数为{$floor}请点击同一纵轴此处之上的木牌设置".($floor+1)."楼\n若要开始设置负数层则使用指令/dt low");
+        }elseif($setter['x']==$x && $setter['z']==$z){
+          if($setter['status']=='high')
+          {
+            if($y <= $setter['now_y'])
+            {
+              $player->sendMessage("有没有搞错！？".($setter['floor']+1)."楼没有{$setter['floor']}楼高？");
+              return;
+            }
+            $setter = array_merge($setter,array(
+              'now_y'=>$y,
+              'floor'=>($setter['floor']+1)
+            ));
+          }elseif($setter['status']=='low')
+          {
+            if($y >= $setter['base_y'] || $y >= $setter['now_y'])
+            {
+              $player->sendMessage("有没有搞错！？".($setter['floor']+1)."楼没有{$setter['floor']}楼高？");
+              return;
+            }
+            $setter = array_merge($setter,array(
+              'now_y'=>$y,
+              'floor'=>($setter['floor']+1)
+            ));
+          }
+          
         }
+        $floor = $this->setters[$name]['floor'];
+        $sender->sendMessage("设置成功，当前y轴高度为{$y}，层数为{$floor}请点击同一纵轴此处之上的木牌设置".($floor+1)."楼\n若要开始设置负数层则使用指令/dt low\n完成设置使用指令 /dt ok");
       }
     }
   }
@@ -190,7 +219,7 @@ class Manager implements Listener,CommandExecutor
     unset($ele['points'][$pos]);
     self::setElevator($name,$ele);
   }
-  public static function removeElevator($name)
+  public static function removeElevator($name):void
   {
     if(($ele=self::getElevator($name))===null) return;
     foreach($ele['points'] as $pos)
