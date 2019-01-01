@@ -1,0 +1,15 @@
+name: YElevator
+api:
+- 3.0.0
+- 4.0.0
+version: '1.0.0_alpha'
+load: POSTWORLD
+main: yxmingy\YElevator\Main
+author: xMingcommands:
+  dt:
+    description: "电梯系统主指令"
+    permission: yxmingy.command.dt
+    usage: "/dt help"
+permissions:
+  yxmingy.command.dt: 
+    default: op
