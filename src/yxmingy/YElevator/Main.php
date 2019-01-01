@@ -18,6 +18,7 @@ class Main extends CommandDispenser
   public function onEnable()
   {
     self::registerListeners();
+    manager\Price::init();
     self::notice("[".self::PLUGIN_NAME."] is Enabled by xMing!");
   }
   public function onDisable()

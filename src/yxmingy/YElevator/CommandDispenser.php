@@ -4,9 +4,10 @@ use pocketmine\command\
 {Command,CommandSender};
 abstract class CommandDispenser extends ListenerManager
 {
-  const MAIN_CMD = "yframe";
+  const MAIN_CMD = "dt";
   protected static $cmdList = //"cmd"=>"class"
   [
+  "set"=>manager\Manager::class,
   ];
   protected static $executors = [];
   protected static function dispenseExecutors():void
